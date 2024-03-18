@@ -1,0 +1,17 @@
+SELECT 			
+  category.name AS genre, 			
+  COUNT(rental.rental_id) AS rental_count,			
+  SUM(payment.amount) AS total_revenue			
+FROM rental			
+INNER JOIN inventory ON rental.inventory_id = inventory.inventory_id			
+INNER JOIN film ON inventory.film_id = film.film_id			
+INNER JOIN film_category ON film.film_id = film_category.film_id			
+INNER JOIN category ON film_category.category_id = category.category_id			
+INNER JOIN payment ON rental.rental_id = payment.rental_id			
+GROUP BY category.name			
+ORDER BY rental_count DESC;			
+
+#Query Explanation#
+#This SQL query retrieves the total number of rentals and revenue per film genre. 
+#It joins several tables to link rentals to their respective film genres and aggregates the data by genre, counting rentals and summing up revenue.
+#The results are grouped by genre and ordered by the count of rentals in descending order to highlight the most popular genres by rental activity.
