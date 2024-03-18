@@ -1,0 +1,44 @@
+WITH CountryRevenue AS (			
+    SELECT 			
+        c.country,			
+        SUM(p.amount) AS total_revenue			
+    FROM payment p			
+    JOIN rental r ON p.rental_id = r.rental_id			
+    JOIN customer cu ON r.customer_id = cu.customer_id			
+    JOIN address a ON cu.address_id = a.address_id			
+    JOIN city ci ON a.city_id = ci.city_id			
+    JOIN country c ON ci.country_id = c.country_id			
+    GROUP BY c.country			
+    ORDER BY total_revenue DESC			
+    LIMIT 10			
+),			
+GenreRevenue AS (			
+    SELECT 			
+        c.country,			
+        cat.name AS genre,			
+        SUM(p.amount) AS genre_revenue			
+    FROM payment p			
+    JOIN rental r ON p.rental_id = r.rental_id			
+    JOIN inventory i ON r.inventory_id = i.inventory_id			
+    JOIN film f ON i.film_id = f.film_id			
+    JOIN film_category fc ON f.film_id = fc.film_id			
+    JOIN category cat ON fc.category_id = cat.category_id			
+    JOIN customer cu ON r.customer_id = cu.customer_id			
+    JOIN address a ON cu.address_id = a.address_id			
+    JOIN city ci ON a.city_id = ci.city_id			
+    JOIN country c ON ci.country_id = c.country_id			
+    WHERE c.country IN (SELECT country FROM CountryRevenue)			
+    GROUP BY c.country, cat.name			
+)			
+SELECT 			
+    gr.country,			
+    gr.genre,			
+    gr.genre_revenue			
+FROM GenreRevenue gr			
+JOIN CountryRevenue cr ON gr.country = cr.country			
+ORDER BY gr.country, gr.genre_revenue DESC;			
+
+#Query Explanation#
+#The first part, CountryRevenue, calculates the total revenue per country from rental payments, orders the results by revenue in descending order, and limits the output to the top 10 countries. 
+#The second part, GenreRevenue, computes the revenue by genre within those top 10 revenue-generating countries. It then combines the two sets using a JOIN to correlate the genre revenue with the corresponding country. 
+#Finally, it sorts the results by country and genre revenue in descending order, giving a clear picture of which genres are most popular in the highest-earning countries.
