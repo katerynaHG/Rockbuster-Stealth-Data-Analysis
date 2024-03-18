@@ -7,9 +7,7 @@
 <p>The motivation behind our analysis is to understand customer trends and preferences as Rockbuster transitions to a digital streaming model.</p>
 
 ## Data Limitations
-<blockquote>
-The dataset includes transactions from two stores in 2006. A lack of detailed customer demographic data is noted.
-</blockquote>
+<p>The dataset includes transactions from two stores in 2006. A lack of detailed customer demographic data is noted.</p>
 
 ## Objectives
 <ul>
